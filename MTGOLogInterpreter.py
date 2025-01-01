@@ -1,27 +1,25 @@
 import logging
 import os
+import queue
 import yaml
 
+from Config import Config
+from ConfigKey import ConfigKey
+from EventCommunicator import EventCommunicator
+from EventType import EventType
 from LogFileLineReaderThread import LogFileLineReaderThread
 from LoggingFormatter import LoggingFormatter
 
 class MTGOLogInterpreter:
 	
 	_logger: logging.Logger
-	_config: dict
+	_config: Config
+	_comms: EventCommunicator
 	
-	DEFAULT_CONFIG_FILE = './config.yaml'
-	
-	DEFAULT_CONFIG_DATA = {
-		'MTGO Log File Location': None,
-		'Port': 62559,
-		'Logging Level': 'WARNING',
-	}
-	
-	def __init__(self, config: dict | str = DEFAULT_CONFIG_FILE):
+	def __init__(self, config: dict | str | None = None):
 		self._logger = self.__setup_logger()
 		self._config = self.__setup_config(config)
-		self.__update_logging_level()
+		self._comms = self.__setup_comms()
 
 	def __setup_logger(self) -> logging.Logger:
 		self.__enable_console_colors()
@@ -36,13 +34,7 @@ class MTGOLogInterpreter:
 		os.system('')
 
 	def __setup_config(self, config: dict | str) -> dict:
-		if type(config) is str:
-			config = self.__get_config_from_file(config)
-		ret = {}
-		for k in config:
-			ret[k] = config.get(k, self.DEFAULT_CONFIG_DATA[k])
-		self._logger.info(f'Using configuration: {ret}')
-		return ret
+		return Config(self._logger, config)
 
 	def __get_config_from_file(self, config_file: str) -> dict:
 		try:
@@ -50,13 +42,13 @@ class MTGOLogInterpreter:
 				return yaml.safe_load(f.read())
 		except FileNotFoundError:
 			self._logger.warn(f'Specified config file "{config_file}" not found, using defaults.')
-			return self.DEFAULT_CONFIG_DATA\
+			return self.DEFAULT_CONFIG_DATA
 	
-	def __update_logging_level(self):
-		if self._config['Logging Level'] not in list(logging.getLevelNamesMapping()):
-			self._logger.fatal(f'Invalid logging level provided: {self._config['Logging Level']}')
-			exit()
-		self._logger.setLevel(getattr(logging, self._config['Logging Level']))
+	def __setup_comms(self) -> EventCommunicator:
+		return EventCommunicator()
+
+	def subscribe(self, event_type: EventType) -> queue.SimpleQueue:
+		return self._comms.subscribe(event_type)
 
 	def run(self) -> None:
 		self.__start_daemon_threads()
@@ -67,5 +59,6 @@ class MTGOLogInterpreter:
 		self._logger.critical('CRITICAL')
 
 	def __start_daemon_threads(self) -> None:
-		LogFileLineReaderThread(logger = self._logger, log_file_location = self._config['MTGO Log File Location']).start()
+		for daemon_thread in (LogFileLineReaderThread,):
+			daemon_thread(logger = self._logger, config = self._config, comms = self._comms).start()
 
