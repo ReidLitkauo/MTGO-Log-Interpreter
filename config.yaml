@@ -1,0 +1,14 @@
+
+# MTGO Log File Location
+# NO DEFAULT
+MTGO Log File Location: C:\Users\reid\AppData\Local\Apps\2.0\23L54AL8.QMY\DT1RYA46.755\mtgo..tion_dbac2845cba5280e_0003.0004_7ea89fe9656fdf1e\Logs\mtgo.log
+
+# port
+# Default: 62559
+Port: 62559
+
+# Logging Level
+# Controls logging verbosity.
+# One of: CRITICAL ERROR WARNING INFO DEBUG
+Logging Level: CRITICAL
+
