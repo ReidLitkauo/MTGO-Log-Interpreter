@@ -7,8 +7,10 @@ from Config import Config
 from ConfigKey import ConfigKey
 from EventCommunicator import EventCommunicator
 from EventType import EventType
+from GameplayStatusUpdateProcessorThread import GameplayStatusUpdateProcessorThread
 from LogFileLineReaderThread import LogFileLineReaderThread
 from LoggingFormatter import LoggingFormatter
+from WebsocketServerThread import WebsocketServerThread
 
 class MTGOLogInterpreter:
 	
@@ -59,6 +61,10 @@ class MTGOLogInterpreter:
 		self._logger.critical('CRITICAL')
 
 	def __start_daemon_threads(self) -> None:
-		for daemon_thread in (LogFileLineReaderThread,):
+		for daemon_thread in (
+			WebsocketServerThread,
+			LogFileLineReaderThread,
+			GameplayStatusUpdateProcessorThread,
+		):
 			daemon_thread(logger = self._logger, config = self._config, comms = self._comms).start()
 
