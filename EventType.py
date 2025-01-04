@@ -2,7 +2,10 @@ import enum
 
 class EventType(enum.Enum):
 	
-	UNKNOWN = 0
-	RAW_LINE = 1
+	ALL_EVENTS = 'all_events'
 	
-	GAMEPLAY_STATUS_UPDATE = 100
+	UNKNOWN = 'unknown'
+	RAW_LINE = 'raw_line'
+	
+	GAMEPLAY_STATUS_UPDATE = 'gameplay_status_update'
+

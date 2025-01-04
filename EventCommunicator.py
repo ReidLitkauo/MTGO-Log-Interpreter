@@ -30,6 +30,6 @@ class EventCommunicator:
 
 	def put(self, event_type: EventType, item) -> None:
 		with self.__queues_lock:
-			for event_queue in self.__queues[event_type]:
+			for event_queue in self.__queues[event_type] + self.__queues[EventType.ALL_EVENTS]:
 				event_queue.put(item)
 

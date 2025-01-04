@@ -7,21 +7,26 @@ from Config import Config
 from ConfigKey import ConfigKey
 from EventCommunicator import EventCommunicator
 from EventType import EventType
-from GameplayStatusUpdateProcessorThread import GameplayStatusUpdateProcessorThread
+from GameplayStatusUpdateProcessor import GameplayStatusUpdateProcessor
 from LogFileLineReaderThread import LogFileLineReaderThread
+from LogLineProcessor import LogLineProcessor
 from LoggingFormatter import LoggingFormatter
 from WebsocketServerThread import WebsocketServerThread
+from WorkerThread import WorkerThread
 
 class MTGOLogInterpreter:
 	
 	_logger: logging.Logger
 	_config: Config
 	_comms: EventCommunicator
+	__thread_log_file_line_reader: LogFileLineReaderThread
+	__thread_websocket_server: WebsocketServerThread
 	
 	def __init__(self, config: dict | str | None = None):
 		self._logger = self.__setup_logger()
 		self._config = self.__setup_config(config)
 		self._comms = self.__setup_comms()
+		self._threads = []
 
 	def __setup_logger(self) -> logging.Logger:
 		self.__enable_console_colors()
@@ -49,8 +54,11 @@ class MTGOLogInterpreter:
 	def __setup_comms(self) -> EventCommunicator:
 		return EventCommunicator()
 
-	def subscribe(self, event_type: EventType) -> queue.SimpleQueue:
+	def subscribe_to_events(self, event_type: EventType) -> queue.SimpleQueue:
 		return self._comms.subscribe(event_type)
+	
+	def register_log_processor(self, processor: LogLineProcessor) -> None:
+		self.__thread_log_file_line_reader.register_processor(processor)
 
 	def run(self) -> None:
 		self.__start_daemon_threads()
@@ -61,10 +69,9 @@ class MTGOLogInterpreter:
 		self._logger.critical('CRITICAL')
 
 	def __start_daemon_threads(self) -> None:
-		for daemon_thread in (
+		for thread in (
 			WebsocketServerThread,
 			LogFileLineReaderThread,
-			GameplayStatusUpdateProcessorThread,
 		):
-			daemon_thread(logger = self._logger, config = self._config, comms = self._comms).start()
-
+			thread( logger = self._logger, config = self._config, comms = self._comms ).start()
+	
