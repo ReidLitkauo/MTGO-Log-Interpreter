@@ -12,7 +12,7 @@ Port: 62559
 # Logging Level
 # Controls logging verbosity.
 # One of: CRITICAL ERROR WARNING INFO DEBUG
-Logging Level: DEBUG
+Logging Level: WARNING
 
 # Delay Between Checks
 # Controls the time between checking the MTGO log file for updates.

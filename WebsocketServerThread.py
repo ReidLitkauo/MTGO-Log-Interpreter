@@ -1,9 +1,10 @@
 import asyncio
+import dataclasses
+import json
 import queue
 import websockets.asyncio.server
 
 from ConfigKey import ConfigKey
-from EventType import EventType
 from WorkerThread import WorkerThread
 
 class WebsocketServerThread(WorkerThread):
@@ -13,7 +14,7 @@ class WebsocketServerThread(WorkerThread):
 	
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		self.__queue = self._comms.subscribe(EventType.ALL_EVENTS)
+		self.__queue = self._comms.subscribe()
 		self.__connections = set()
 	
 	def run(self) -> None:
@@ -24,9 +25,11 @@ class WebsocketServerThread(WorkerThread):
 		async with websockets.asyncio.server.serve( self.__ws_handler, '', self._config[ConfigKey.PORT] ):
 			while True:
 				try:
-					line = self.__queue.get_nowait()
-					websockets.asyncio.server.broadcast(self.__connections, line.json())
-					self._logger.info(line)
+					event = self.__queue.get_nowait()
+					event_dict = event.as_dict()
+					event_dict['event_type'] = type(event).__name__
+					websockets.asyncio.server.broadcast(self.__connections, json.dumps(event_dict))
+					self._logger.info(event)
 				except queue.Empty:
 					pass
 				finally:

@@ -3,13 +3,12 @@ import os
 import queue
 import yaml
 
+from BaseEvent import BaseEvent
+from BaseProcessor import BaseProcessor
 from Config import Config
 from ConfigKey import ConfigKey
 from EventCommunicator import EventCommunicator
-from EventType import EventType
-from GameplayStatusUpdateProcessor import GameplayStatusUpdateProcessor
 from LogFileLineReaderThread import LogFileLineReaderThread
-from LogLineProcessor import LogLineProcessor
 from LoggingFormatter import LoggingFormatter
 from WebsocketServerThread import WebsocketServerThread
 from WorkerThread import WorkerThread
@@ -19,8 +18,6 @@ class MTGOLogInterpreter:
 	_logger: logging.Logger
 	_config: Config
 	_comms: EventCommunicator
-	__thread_log_file_line_reader: LogFileLineReaderThread
-	__thread_websocket_server: WebsocketServerThread
 	
 	def __init__(self, config: dict | str | None = None):
 		self._logger = self.__setup_logger()
@@ -54,19 +51,17 @@ class MTGOLogInterpreter:
 	def __setup_comms(self) -> EventCommunicator:
 		return EventCommunicator()
 
-	def subscribe_to_events(self, event_type: EventType) -> queue.SimpleQueue:
+	def subscribe(self, event_type: type[BaseEvent] | None = None) -> queue.SimpleQueue:
 		return self._comms.subscribe(event_type)
 	
-	def register_log_processor(self, processor: LogLineProcessor) -> None:
+	def unsubscribe(self, old_queue: queue.SimpleQueue) -> bool:
+		return self._comms.unsubscribe(old_queue)
+	
+	def register_log_processor(self, processor: BaseProcessor) -> None:
 		self.__thread_log_file_line_reader.register_processor(processor)
 
 	def run(self) -> None:
 		self.__start_daemon_threads()
-		self._logger.debug('DEBUG')
-		self._logger.info('INFO')
-		self._logger.warning('WARNING')
-		self._logger.error('ERROR')
-		self._logger.critical('CRITICAL')
 
 	def __start_daemon_threads(self) -> None:
 		for thread in (
