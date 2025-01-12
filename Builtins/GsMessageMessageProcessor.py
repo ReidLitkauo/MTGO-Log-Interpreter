@@ -1,9 +1,9 @@
 import json
 import re
 
-from BaseEvent import BaseEvent
-from BaseProcessor import BaseProcessor
-from GsMessageMessageEvent import GsMessageMessageEvent
+from .BaseEvent import BaseEvent
+from .BaseProcessor import BaseProcessor
+from .GsMessageMessageEvent import GsMessageMessageEvent
 
 class GsMessageMessageProcessor(BaseProcessor):
 	

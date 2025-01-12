@@ -1,8 +1,8 @@
 
 
-from BaseEvent import BaseEvent
-from GsMessageMessageProcessor import GsMessageMessageProcessor
-from GameLogEvent import GameLogEvent
+from .BaseEvent import BaseEvent
+from .GsMessageMessageProcessor import GsMessageMessageProcessor
+from .GameLogEvent import GameLogEvent
 
 class GameLogProcessor(GsMessageMessageProcessor):
 	
@@ -10,7 +10,7 @@ class GameLogProcessor(GsMessageMessageProcessor):
 	__GAMELOG_SIGNATURE_OFFSET  = 12
 	__MESSAGE_CONTENT_OFFSET = 24
 
-	def process(self, raw_event: BaseEvent) -> GameLogEvent:
+	def process(self, raw_event: BaseEvent) -> GameLogEvent | None:
 		raw_event = super().process(raw_event)
 		if not raw_event:
 			return None

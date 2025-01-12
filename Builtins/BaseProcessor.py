@@ -1,7 +1,7 @@
 import logging
 import typing
 
-from BaseEvent import BaseEvent
+from .BaseEvent import BaseEvent
 
 class BaseProcessor:
 	

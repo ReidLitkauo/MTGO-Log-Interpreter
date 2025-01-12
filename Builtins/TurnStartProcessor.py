@@ -1,14 +1,14 @@
 import re
 
-from BaseEvent import BaseEvent
-from GameLogProcessor import GameLogProcessor
-from TurnStartEvent import TurnStartEvent
+from .BaseEvent import BaseEvent
+from .GameLogProcessor import GameLogProcessor
+from .TurnStartEvent import TurnStartEvent
 
 class TurnStartProcessor(GameLogProcessor):
 	
 	__regex: re.Match = re.compile('@PTurn (\\d*): (.*)')
 	
-	def process(self, raw_event: BaseEvent) -> TurnStartEvent:
+	def process(self, raw_event: BaseEvent) -> TurnStartEvent | None:
 		raw_event = super().process(raw_event)
 		if not raw_event:
 			return None

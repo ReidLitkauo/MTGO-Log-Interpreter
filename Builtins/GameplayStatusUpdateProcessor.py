@@ -1,9 +1,9 @@
 import json
 import re
 
-from BaseEvent import BaseEvent
-from BaseProcessor import BaseProcessor
-from GameplayStatusUpdateEvent import GameplayStatusUpdateEvent
+from .BaseEvent import BaseEvent
+from .BaseProcessor import BaseProcessor
+from .GameplayStatusUpdateEvent import GameplayStatusUpdateEvent
 
 class GameplayStatusUpdateProcessor(BaseProcessor):
 	

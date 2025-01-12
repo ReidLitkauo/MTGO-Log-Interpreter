@@ -1,6 +1,6 @@
 import dataclasses
 
-from GsMessageMessageEvent import GsMessageMessageEvent
+from .GsMessageMessageEvent import GsMessageMessageEvent
 
 @dataclasses.dataclass
 class GameLogEvent(GsMessageMessageEvent):

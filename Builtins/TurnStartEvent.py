@@ -1,6 +1,6 @@
 import dataclasses
 
-from GameLogEvent import GameLogEvent
+from .GameLogEvent import GameLogEvent
 
 @dataclasses.dataclass
 class TurnStartEvent(GameLogEvent):

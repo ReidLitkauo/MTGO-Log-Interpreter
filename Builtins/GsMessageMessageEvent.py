@@ -1,6 +1,6 @@
 import dataclasses
 
-from BaseEvent import BaseEvent
+from .BaseEvent import BaseEvent
 
 @dataclasses.dataclass
 class GsMessageMessageEvent(BaseEvent):
