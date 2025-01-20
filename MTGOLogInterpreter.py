@@ -3,16 +3,16 @@ import os
 import queue
 import yaml
 
-from Config import Config
-from ConfigKey import ConfigKey
-from EventCommunicator import EventCommunicator
-from LogFileLineReaderThread import LogFileLineReaderThread
-from LoggingFormatter import LoggingFormatter
-from WebsocketServerThread import WebsocketServerThread
-from WorkerThread import WorkerThread
+from .Config import Config
+from .ConfigKey import ConfigKey
+from .EventCommunicator import EventCommunicator
+from .LogFileLineReaderThread import LogFileLineReaderThread
+from .LoggingFormatter import LoggingFormatter
+from .WebsocketServerThread import WebsocketServerThread
+from .WorkerThread import WorkerThread
 
-from Builtins.BaseEvent import BaseEvent
-from Builtins.BaseProcessor import BaseProcessor
+from .Builtins.BaseEvent import BaseEvent
+from .Builtins.BaseProcessor import BaseProcessor
 
 class MTGOLogInterpreter:
 	

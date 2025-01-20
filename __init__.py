@@ -1,0 +1,2 @@
+from .MTGOLogInterpreter import MTGOLogInterpreter
+

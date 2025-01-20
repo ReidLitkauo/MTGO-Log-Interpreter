@@ -4,8 +4,8 @@ import json
 import queue
 import websockets.asyncio.server
 
-from ConfigKey import ConfigKey
-from WorkerThread import WorkerThread
+from .ConfigKey import ConfigKey
+from .WorkerThread import WorkerThread
 
 class WebsocketServerThread(WorkerThread):
 	

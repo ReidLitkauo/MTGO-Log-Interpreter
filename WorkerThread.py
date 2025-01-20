@@ -1,8 +1,8 @@
 import logging
 import threading
 
-from Config import Config
-from EventCommunicator import EventCommunicator
+from .Config import Config
+from .EventCommunicator import EventCommunicator
 
 class WorkerThread(threading.Thread):
 

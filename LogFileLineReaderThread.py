@@ -4,15 +4,15 @@ import threading
 import queue
 import time
 
-from ConfigKey import ConfigKey
-from WorkerThread import WorkerThread
+from .ConfigKey import ConfigKey
+from .WorkerThread import WorkerThread
 
-from Builtins.BaseEvent import BaseEvent
-from Builtins.BaseProcessor import BaseProcessor
-from Builtins.GameLogProcessor import GameLogProcessor
-from Builtins.GameplayStatusUpdateProcessor import GameplayStatusUpdateProcessor
-from Builtins.GsMessageMessageProcessor import GsMessageMessageProcessor
-from Builtins.TurnStartProcessor import TurnStartProcessor
+from .Builtins.BaseEvent import BaseEvent
+from .Builtins.BaseProcessor import BaseProcessor
+from .Builtins.GameLogProcessor import GameLogProcessor
+from .Builtins.GameplayStatusUpdateProcessor import GameplayStatusUpdateProcessor
+from .Builtins.GsMessageMessageProcessor import GsMessageMessageProcessor
+from .Builtins.TurnStartProcessor import TurnStartProcessor
 
 class LogFileLineReaderThread(WorkerThread):
 	

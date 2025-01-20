@@ -1,7 +1,7 @@
 import logging
 import yaml
 
-from ConfigKey import ConfigKey
+from .ConfigKey import ConfigKey
 
 class Config:
 	

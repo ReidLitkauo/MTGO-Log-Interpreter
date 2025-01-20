@@ -1,7 +1,7 @@
 import queue
 import threading
 
-from Builtins.BaseEvent import BaseEvent
+from .Builtins.BaseEvent import BaseEvent
 
 class EventCommunicator:
 	
